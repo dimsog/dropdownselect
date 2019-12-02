@@ -1,6 +1,6 @@
 "use strict";
 
-import './../scss/vanilla-select2.scss';
+import './../scss/vanilla-selectx.scss';
 
 export default class {
     constructor(selector) {

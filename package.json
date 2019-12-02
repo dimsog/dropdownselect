@@ -1,14 +1,14 @@
 {
-  "name": "vanilla-select2",
+  "name": "vanilla-selectx",
   "version": "1.0.0",
   "description": "Simple and lightweight javascript select",
-  "main": "src/js/vanilla-select2.js",
+  "main": "src/js/vanilla-selectx.js",
   "scripts": {
     "prod": "webpack --mode=production"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/dimsog/vanilla-select2.git"
+    "url": "git+https://github.com/dimsog/vanilla-selectx.git"
   },
   "keywords": [
     "select",
@@ -17,9 +17,9 @@
   "author": "Dmitry R",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/dimsog/vanilla-select2/issues"
+    "url": "https://github.com/dimsog/vanilla-selectx/issues"
   },
-  "homepage": "https://github.com/dimsog/vanilla-select2#readme",
+  "homepage": "https://github.com/dimsog/vanilla-selectx#readme",
   "devDependencies": {
     "@babel/core": "^7.7.2",
     "@babel/preset-env": "^7.7.1",
