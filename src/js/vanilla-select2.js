@@ -8,9 +8,23 @@ export default class {
         if (this.$el === null) {
             throw new Error(`${selector} not found!`);
         }
-
         this._render();
     }
+
+    getSelectedOptions() {
+        return Array.from(this.$el.options)
+            .filter(option => option.selected)
+    }
+
+    getValue() {
+        let selectedOptions = this.getSelectedOptions();
+        if (selectedOptions.length === 1) {
+            return selectedOptions[0].value;
+        }
+        return selectedOptions
+            .map(option => option.value);
+    }
+
 
     _render() {
         // init container
