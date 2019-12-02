@@ -2,11 +2,11 @@ const path = require('path');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 module.exports = {
-    entry: './src/js/vanilla-dropdown.js',
+    entry: './src/js/vanilla-select2.js',
     output: {
         path: path.resolve(__dirname, "dist"),
-        filename: 'vanilla-dropdown.js',
-        library: 'VanillaDropdown',
+        filename: 'vanilla-select2.js',
+        library: 'VanillaSelect2',
         libraryExport: "default",
         libraryTarget: "var"
     },
@@ -39,7 +39,7 @@ module.exports = {
     },
     plugins: [
         new MiniCssExtractPlugin({
-            filename: 'vanilla-dropdown.css'
+            filename: 'vanilla-select2.css'
         })
     ]
 };
