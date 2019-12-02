@@ -25,6 +25,15 @@ export default class {
             .map(option => option.value);
     }
 
+    getValueText() {
+        let selectedOptions = this.getSelectedOptions();
+        if (selectedOptions.length === 1) {
+            return selectedOptions[0].innerHTML;
+        }
+        return selectedOptions
+            .map(option => option.innerHTML);
+    }
+
 
     _render() {
         // init container
@@ -48,5 +57,14 @@ export default class {
         this.$el.style.display = 'none';
         this.$el.after(this.$container);
         this.$container.prepend(this.$el);
+        this._renderButtonText();
+    }
+
+    _renderButtonText() {
+        let text = this.getValueText();
+        if (Array.isArray(text) === false) {
+            text = [text];
+        }
+        this.$button.innerHTML = text.join(', ');
     }
 }
