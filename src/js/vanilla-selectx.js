@@ -38,16 +38,16 @@ export default class {
     _render() {
         // init container
         this.$container = document.createElement('div');
-        this.$container.classList.add('va-select2');
+        this.$container.classList.add('va-selectx');
 
         // init button
         this.$button = document.createElement('button');
-        this.$button.classList.add('va-select2__button');
+        this.$button.classList.add('va-selectx__button');
 
 
         // init dropdown
         this.$dropdownContainer = document.createElement('div');
-        this.$dropdownContainer.classList.add('va-select2__dropdown');
+        this.$dropdownContainer.classList.add('va-selectx__dropdown');
         this.$dropdown = document.createElement('ul');
         this.$dropdownContainer.append(this.$dropdown);
 
