@@ -126,6 +126,9 @@ export default class {
         let $node = document.createElement('li');
         $node.classList.add('va-selectx__dropdown-option');
         $node.innerHTML = $option.innerHTML;
+        $node.addEventListener('click', () => {
+            this.$el.selectedIndex = $option.index;
+        });
         return $node;
     }
 
