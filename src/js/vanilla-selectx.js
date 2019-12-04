@@ -9,27 +9,51 @@ export default class {
             throw new Error(`${selector} not found!`);
         }
         this._state = {
-            data: {
-                $groups: [],
-                /**
-                 * {
-                 *      $option: HTMLElement (<option>)
-                 *      $element: HTMLElement (<li>)
-                 * }
-                 */
-                $options: []
-            }
+            data: []
         };
 
-        this._bindEvents();
-        this._render();
+        // this._bindEvents();
+        // this._render();
     }
 
-    addOption(value, name) {
-        let $option = document.createElement('option');
-        $option.value = value;
-        $option.innerHTML = name;
-        this.$el.appendChild($option);
+    setOptions(options) {
+        for (let option of options) {
+            this.add(option);
+        }
+    }
+
+    /**
+     * select.add({
+     *     group_id: int (default false)
+     *     name: 'Option 1',
+     *     value: 1
+     * });
+     * @param option
+     */
+    add(option) {
+        if (option.group_id === undefined) {
+            option.group_id = false;
+        }
+        option.type = 'option';
+        this._state.data.push(option);
+        return this;
+    }
+
+    /**
+     * this.addGroup({
+     *     id: 100,
+     *     name: 'Test'
+     * }
+     * @param group
+     */
+    addGroup(group) {
+
+    }
+
+    setValue(value) {
+        this.$el.value = [value, 1];
+        let event = new Event("change", {bubbles: true});
+        this.$el.dispatchEvent(event);
         return this;
     }
 
@@ -89,6 +113,7 @@ export default class {
 
     _renderButtonText() {
         let text = this.getValueText();
+        console.log(text);
         if (Array.isArray(text) === false) {
             text = [text];
         }
@@ -135,7 +160,8 @@ export default class {
         $node.classList.add('va-selectx__dropdown-option');
         $node.innerHTML = $option.innerHTML;
         $node.addEventListener('click', () => {
-            this.$el.selectedIndex = $option.index;
+            this.setValue($option.value);
+            this._renderButtonText();
         });
         return $node;
     }

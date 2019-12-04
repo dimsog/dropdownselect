@@ -12,7 +12,7 @@
     <div class="container">
         <div class="row">
             <div class="col-lg-12 mt-4">
-                <select id="select">
+                <select id="select" multiple>
                     <optgroup label="Demo group">
                         <option value="1">Option 1</option>
                         <option value="2">Option 2</option>
@@ -30,6 +30,10 @@
     let select = new VanillaSelectx("#select");
     let $select = document.getElementById('select');
 
+    $select.addEventListener('change', function () {
+        console.log('change!');
+    });
+
     let group = document.createElement('optgroup');
     setTimeout(() => {
         // let option = document.createElement('option');
@@ -46,18 +50,20 @@
             group.appendChild(option);
         }
         $select.appendChild(group);
-    }, 2000);
+    }, 1000);
 
     setTimeout(() => {
         let option = document.createElement('option');
         option.value = 'NEW!!!!';
         option.innerHTML = 'NEW!!!!';
         group.appendChild(option);
-    }, 3000);
+    }, 2000);
 
     setTimeout(() => {
-        select.addOption(100, 'Test add option')
-    }, 4000);
+        select.addOption(100, 'Test add option');
+        select.setValue("100");
+    }, 3000);
+
 </script>
 </body>
 </html>
