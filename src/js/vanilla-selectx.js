@@ -25,6 +25,14 @@ export default class {
         this._render();
     }
 
+    addOption(value, name) {
+        let $option = document.createElement('option');
+        $option.value = value;
+        $option.innerHTML = name;
+        this.$el.appendChild($option);
+        return this;
+    }
+
     getSelectedOptions() {
         return Array.from(this.$el.options)
             .filter(option => option.selected)
