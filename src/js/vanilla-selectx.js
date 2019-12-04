@@ -24,30 +24,44 @@ export default class {
 
     /**
      * select.add({
-     *     group_id: int (default false)
      *     name: 'Option 1',
-     *     value: 1
+     *     value: 1,
+     *     visible: bool
      * });
      * @param option
      */
     add(option) {
-        if (option.group_id === undefined) {
-            option.group_id = false;
-        }
         option.type = 'option';
         this._state.data.push(option);
         return this;
     }
 
+    addToGroup(groupId, option) {
+        for (let item of this._state.data) {
+            if (item.type === 'group' && item.group_id === groupId) {
+                if (item.options === undefined) {
+                    item.options = [];
+                }
+                item.options.push(option);
+            }
+        }
+    }
+
     /**
      * this.addGroup({
      *     id: 100,
-     *     name: 'Test'
+     *     name: 'Test',
+     *     options: [{
+     *         name: 'Option 2',
+     *         value: 2
+     *     }]
      * }
      * @param group
      */
     addGroup(group) {
-
+        group.type = 'group';
+        this._state.data.push(group);
+        return this;
     }
 
     setValue(value) {
