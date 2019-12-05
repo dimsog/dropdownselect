@@ -3,101 +3,139 @@
 import './../scss/vanilla-selectx.scss';
 
 export default class {
-    constructor(selector) {
+    constructor(selector, options = {}) {
         this.$el = document.querySelector(selector);
         if (this.$el === null) {
             throw new Error(`${selector} not found!`);
         }
         this._state = {
-            data: []
+            data: [],
+            isRendered: false
         };
-
-        // this._bindEvents();
-        // this._render();
-    }
-
-    setOptions(options) {
-        for (let option of options) {
-            this.add(option);
+        if (options.value === undefined) {
+            options.value = this.$el.value;
         }
+
+        // get options from select
+        for (let $option of this.$el.options) {
+            this.add({
+                value: $option.value,
+                name: $option.innerHTML
+            });
+        }
+
+        this.setValue(options.value);
+        this._render();
+        this._bindCoreEvents();
+        this._update();
     }
 
     /**
      * select.add({
-     *     name: 'Option 1',
      *     value: 1,
-     *     visible: bool
+     *     name: 'Text'
      * });
      * @param option
      */
     add(option) {
         option.type = 'option';
         this._state.data.push(option);
-        return this;
-    }
-
-    addToGroup(groupId, option) {
-        for (let item of this._state.data) {
-            if (item.type === 'group' && item.group_id === groupId) {
-                if (item.options === undefined) {
-                    item.options = [];
-                }
-                item.options.push(option);
-            }
-        }
-    }
-
-    /**
-     * this.addGroup({
-     *     id: 100,
-     *     name: 'Test',
-     *     options: [{
-     *         name: 'Option 2',
-     *         value: 2
-     *     }]
-     * }
-     * @param group
-     */
-    addGroup(group) {
-        group.type = 'group';
-        this._state.data.push(group);
+        this._update();
         return this;
     }
 
     setValue(value) {
-        this.$el.value = [value, 1];
-        let event = new Event("change", {bubbles: true});
-        this.$el.dispatchEvent(event);
-        return this;
-    }
-
-    getSelectedOptions() {
-        return Array.from(this.$el.options)
-            .filter(option => option.selected)
-    }
-
-    getOptions() {
-        return this.$el.options;
+        let option = this.getOptionByValue(value);
+        if (option === null) {
+            return false;
+        }
+        for (let option of this.getOptions()) {
+            option.selected = false;
+        }
+        option.selected = true;
+        this._update();
     }
 
     getValue() {
-        let selectedOptions = this.getSelectedOptions();
-        if (selectedOptions.length === 1) {
-            return selectedOptions[0].value;
+        let option = this.getSelectedOption();
+        if (option === null) {
+            return null;
         }
-        return selectedOptions
-            .map(option => option.value);
+        return option.value;
     }
 
-    getValueText() {
-        let selectedOptions = this.getSelectedOptions();
-        if (selectedOptions.length === 1) {
-            return selectedOptions[0].innerHTML;
+    getOptionByValue(value) {
+        for (let option of this.getOptions()) {
+            if (option.value === value) {
+                return option;
+            }
         }
-        return selectedOptions
-            .map(option => option.innerHTML);
+        return null;
     }
 
+    getOptions() {
+        return this._state.data;
+    }
+
+    getSelectedOption() {
+        let options = this.getOptions();
+        if (options.length === 0) {
+            return null;
+        }
+        for (let option of this.getOptions()) {
+            if (option.selected) {
+                return option;
+            }
+        }
+        return options[0];
+    }
+
+    open() {
+        this.$container.classList.add('va-selectx--opened');
+    }
+
+    close() {
+        this.$container.classList.remove('va-selectx--opened');
+    }
+
+    isOpened() {
+        return this.$container.classList.contains('va-selectx--opened');
+    }
+
+    toggle() {
+        if (this.isOpened()) {
+            this.close();
+        } else {
+            this.open();
+        }
+    }
+
+    _isReady() {
+        return this._state.isRendered;
+    }
+
+    _update() {
+        if (this._isReady() === false) {
+            return;
+        }
+        let selectedOption = this.getSelectedOption();
+        if (selectedOption !== null) {
+            this.$input.value = selectedOption.value;
+            this._setButtonText(selectedOption.name);
+        } else {
+            this._setButtonText('');
+        }
+
+        this.$dropdown.innerHTML = '';
+        for (let option of this.getOptions()) {
+            if (option.$node === undefined) {
+                option.$node = document.createElement('li');
+                option.$node.innerHTML = option.name;
+                this._bindOptionEvents(option);
+            }
+            this.$dropdown.appendChild(option.$node);
+        }
+    }
 
     _render() {
         // init container
@@ -115,146 +153,43 @@ export default class {
         this.$dropdown = document.createElement('ul');
         this.$dropdownContainer.append(this.$dropdown);
 
+        // init hidden select
+        this.$input = document.createElement('input');
+        this.$input.setAttribute('type', 'hidden');
+        if (this.$el.getAttribute('name') !== null) {
+            this.$input.setAttribute('name', this.$el.getAttribute('name'));
+        }
+        this.$container.append(this.$input);
         this.$container.append(this.$button);
         this.$container.append(this.$dropdownContainer);
 
-        this.$el.style.display = 'none';
-        this.$el.after(this.$container);
-        this.$container.prepend(this.$el);
-        this._renderButtonText();
-        this._repaint();
+        this.$el.parentElement.replaceChild(this.$container, this.$el);
+        this._state.isRendered = true;
     }
 
-    _renderButtonText() {
-        let text = this.getValueText();
-        console.log(text);
-        if (Array.isArray(text) === false) {
-            text = [text];
-        }
-        this.$button.innerHTML = text.join(', ');
-    }
-
-    _bindEvents() {
-        let observer = new MutationObserver((data) => {
-            for (let event of data) {
-                if (event.type === "childList") {
-                    this._repaint();
-                }
+    _bindCoreEvents() {
+        this.$button.addEventListener('click', (e) => {
+            e.preventDefault();
+            this.toggle();
+        });
+        document.addEventListener('click', (e) => {
+            if (this.isOpened() === false) {
+                return false;
+            }
+            if (this.$container.contains(e.target) === false) {
+                this.close();
             }
         });
-
-        observer.observe(this.$el, {
-            childList: true,
-            characterData: true,
-            attributes: true,
-            subtree: true
-        });
     }
 
-    _hasHtmlOptionElement($option) {
-        for (let $node of this._state.data.$options) {
-            if ($node.$option === $option) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    _getHtmlOptionElement($option) {
-        for (let $node of this._state.data.$options) {
-            if ($node.$option === $option) {
-                return $node.$element;
-            }
-        }
-        return null;
-    }
-
-    _createHtmlOptionElement($option) {
-        let $node = document.createElement('li');
-        $node.classList.add('va-selectx__dropdown-option');
-        $node.innerHTML = $option.innerHTML;
-        $node.addEventListener('click', () => {
-            this.setValue($option.value);
-            this._renderButtonText();
-        });
-        return $node;
-    }
-
-    _assignHtmlOptionElement($option, $htmlElement) {
-        this._state.data.$options.push({
-            $option: $option,
-            $element: $htmlElement
+    _bindOptionEvents(option) {
+        option.$node.addEventListener('click', (e) => {
+            this.close();
+            this.setValue(option.value);
         })
     }
 
-    _hasHtmlOptionGroupElement($group) {
-        for (let $node of this._state.data.$groups) {
-            if ($node.$group === $group) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    _getHtmlOptionGroupElement($group) {
-        for (let $item of this._state.data.$groups) {
-            if ($item.$group === $group) {
-                return $item.$element;
-            }
-        }
-        return null;
-    }
-
-    _createHtmlOptionGroupElement($group) {
-        let $node = document.createElement('li');
-        $node.classList.add('va-selectx__dropdown-group');
-        $node.innerHTML = $group.getAttribute('label');
-        return $node;
-    }
-
-    _assignHtmlOptionGroupElement($group, $htmlElement) {
-        this._state.data.$groups.push({
-            $group: $group,
-            $element: $htmlElement
-        })
-    }
-
-    _makeNodeElements() {
-        for (let $option of this.$el.options) {
-            if (this._hasHtmlOptionElement($option) === false) {
-                this._assignHtmlOptionElement($option, this._createHtmlOptionElement($option));
-            }
-        }
-        for (let $group of this.$el.children) {
-            if ($group instanceof HTMLOptGroupElement && this._hasHtmlOptionGroupElement($group) === false) {
-                let $htmlGroup = this._createHtmlOptionGroupElement($group);
-                for (let $dataOption of this._state.data.$options) {
-                    if ($dataOption.$option.parentElement === $group) {
-                        this._assignHtmlGroupAndHtmlOption($htmlGroup, $dataOption.$element);
-                    }
-                }
-                this._assignHtmlOptionGroupElement($group, $htmlGroup);
-            }
-        }
-    }
-
-    _assignHtmlGroupAndHtmlOption($htmlGroup, $htmlOption) {
-        let $container = $htmlGroup.querySelector('ul');
-        if ($container === null) {
-            $container = document.createElement('ul');
-            $htmlGroup.appendChild($container);
-        }
-        $container.appendChild($htmlOption);
-    }
-
-    _repaint() {
-        this.$dropdown.innerHTML = '';
-        this._makeNodeElements();
-
-        for (let $child of this.$el.children) {
-            $child instanceof HTMLOptGroupElement ?
-                this.$dropdown.appendChild(this._getHtmlOptionGroupElement($child)) :
-                this.$dropdown.appendChild(this._getHtmlOptionElement($child));
-        }
+    _setButtonText(text) {
+        this.$button.innerHTML = text;
     }
 }
