@@ -1,0 +1,193 @@
+"use strict";
+
+export default class {
+    constructor(selector, options = {}) {
+        this.$el = document.querySelector(selector);
+        if (this.$el === null) {
+            throw new Error(`${selector} not found!`);
+        }
+        this._state = {
+            data: [],
+            isRendered: false
+        };
+        if (options.value === undefined) {
+            options.value = this.$el.value;
+        }
+
+        // get options from select
+        for (let $option of this.$el.options) {
+            this.add({
+                value: $option.value,
+                name: $option.innerHTML
+            });
+        }
+
+        this.setValue(options.value);
+        this._render();
+        this._bindCoreEvents();
+        this._update();
+    }
+
+    /**
+     * select.add({
+     *     value: 1,
+     *     name: 'Text'
+     * });
+     * @param option
+     */
+    add(option) {
+        option.type = 'option';
+        this._state.data.push(option);
+        this._update();
+        return this;
+    }
+
+    setValue(value) {
+        let option = this.getOptionByValue(value);
+        if (option === null) {
+            return false;
+        }
+        for (let option of this.getOptions()) {
+            option.selected = false;
+        }
+        option.selected = true;
+        this._update();
+    }
+
+    getValue() {
+        let option = this.getSelectedOption();
+        if (option === null) {
+            return null;
+        }
+        return option.value;
+    }
+
+    getOptionByValue(value) {
+        for (let option of this.getOptions()) {
+            if (option.value === value) {
+                return option;
+            }
+        }
+        return null;
+    }
+
+    getOptions() {
+        return this._state.data;
+    }
+
+    getSelectedOption() {
+        let options = this.getOptions();
+        if (options.length === 0) {
+            return null;
+        }
+        for (let option of this.getOptions()) {
+            if (option.selected) {
+                return option;
+            }
+        }
+        return options[0];
+    }
+
+    open() {
+        this.$container.classList.add('va-selectx--opened');
+    }
+
+    close() {
+        this.$container.classList.remove('va-selectx--opened');
+    }
+
+    isOpened() {
+        return this.$container.classList.contains('va-selectx--opened');
+    }
+
+    toggle() {
+        if (this.isOpened()) {
+            this.close();
+        } else {
+            this.open();
+        }
+    }
+
+    _isReady() {
+        return this._state.isRendered;
+    }
+
+    _update() {
+        if (this._isReady() === false) {
+            return;
+        }
+        let selectedOption = this.getSelectedOption();
+        if (selectedOption !== null) {
+            this.$input.value = selectedOption.value;
+            this._setButtonText(selectedOption.name);
+        } else {
+            this._setButtonText('');
+        }
+
+        this.$dropdown.innerHTML = '';
+        for (let option of this.getOptions()) {
+            if (option.$node === undefined) {
+                option.$node = document.createElement('li');
+                option.$node.innerHTML = option.name;
+                this._bindOptionEvents(option);
+            }
+            this.$dropdown.appendChild(option.$node);
+        }
+    }
+
+    _render() {
+        // init container
+        this.$container = document.createElement('div');
+        this.$container.classList.add('va-selectx');
+
+        // init button
+        this.$button = document.createElement('button');
+        this.$button.classList.add('va-selectx__button');
+
+
+        // init dropdown
+        this.$dropdownContainer = document.createElement('div');
+        this.$dropdownContainer.classList.add('va-selectx__dropdown');
+        this.$dropdown = document.createElement('ul');
+        this.$dropdownContainer.append(this.$dropdown);
+
+        // init hidden select
+        this.$input = document.createElement('input');
+        this.$input.setAttribute('type', 'hidden');
+        if (this.$el.getAttribute('name') !== null) {
+            this.$input.setAttribute('name', this.$el.getAttribute('name'));
+        }
+        this.$container.append(this.$input);
+        this.$container.append(this.$button);
+        this.$container.append(this.$dropdownContainer);
+
+        this.$el.parentElement.replaceChild(this.$container, this.$el);
+        this._state.isRendered = true;
+    }
+
+    _bindCoreEvents() {
+        this.$button.addEventListener('click', (e) => {
+            e.preventDefault();
+            this.toggle();
+        });
+        document.addEventListener('click', (e) => {
+            if (this.isOpened() === false) {
+                return false;
+            }
+            if (this.$container.contains(e.target) === false) {
+                this.close();
+            }
+        });
+    }
+
+    _bindOptionEvents(option) {
+        option.$node.addEventListener('click', (e) => {
+            this.close();
+            this.setValue(option.value);
+        })
+    }
+
+    _setButtonText(text) {
+        this.$button.innerHTML = text;
+    }
+}

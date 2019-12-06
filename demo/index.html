@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
+    <title>Vanilla select2</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link href="../dist/vanilla-selectx.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-6 mt-4">
+                <select id="select" name="some-select">
+                    <option value="1">Option 1</option>
+                    <option value="2">Option 2</option>
+                    <option value="3" selected>Option 3</option>
+                    <option value="4">Option 4</option>
+                    <option value="5">Option 5</option>
+                    <option value="6">Option 6</option>
+                    <option value="7">Option 7</option>
+                    <option value="8">Option 8</option>
+                    <option value="9">Option 9</option>
+                    <option value="10">Option 10</option>
+                    <option value="11">Option 11</option>
+                </select>
+            </div>
+        </div>
+    </div>
+
+<script src="../dist/vanilla-selectx.js"></script>
+<script>
+    let select = new VanillaSelectx("#select");
+    setTimeout(() => {
+        select.add({
+            value: 12,
+            name: 'Test value'
+        });
+        select.setValue(12);
+    }, 2500)
+</script>
+</body>
+</html>
