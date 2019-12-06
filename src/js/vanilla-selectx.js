@@ -1,7 +1,5 @@
 "use strict";
 
-import './../scss/vanilla-selectx.scss';
-
 export default class {
     constructor(selector, options = {}) {
         this.$el = document.querySelector(selector);
