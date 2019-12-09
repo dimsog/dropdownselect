@@ -1,7 +1,7 @@
 {
   "name": "vanilla-selectx",
   "version": "1.0.1",
-  "description": "Simple and lightweight javascript select",
+  "description": "A simple and lightweight javascript select without dependencies",
   "main": "src/js/vanilla-selectx.js",
   "scripts": {
     "prod": "webpack --mode=production"
