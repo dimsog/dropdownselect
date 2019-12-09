@@ -2,7 +2,7 @@ const path = require('path');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 module.exports = {
-    entry: ['./src/js/vanilla-selectx.js', './src/scss/vanilla-selectx.scss'],
+    entry: ['./src/scss/vanilla-selectx.scss', './src/js/vanilla-selectx.js'],
     output: {
         path: path.resolve(__dirname, "dist"),
         filename: 'vanilla-selectx.js',
