@@ -144,6 +144,14 @@ export default class {
         this.$button = document.createElement('button');
         this.$button.classList.add('va-selectx__button');
 
+        this.$arrow = document.createElement('div');
+        this.$arrow.classList.add('va-selectx__arrow');
+
+        this.$buttonContainer = document.createElement('div');
+        this.$buttonContainer.classList.add('va-selectx__button-container');
+        this.$buttonContainer.appendChild(this.$button);
+        this.$buttonContainer.appendChild(this.$arrow);
+
 
         // init dropdown
         this.$dropdownContainer = document.createElement('div');
@@ -158,7 +166,7 @@ export default class {
             this.$input.setAttribute('name', this.$el.getAttribute('name'));
         }
         this.$container.append(this.$input);
-        this.$container.append(this.$button);
+        this.$container.append(this.$buttonContainer);
         this.$container.append(this.$dropdownContainer);
 
         this.$el.parentElement.replaceChild(this.$container, this.$el);
