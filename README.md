@@ -1,6 +1,8 @@
 # vanilla-selectx
 
-Simple javascript select without dependencies
+A simple and lightweight javascript select without dependencies
+
+[Demo](https://vajs.ru/examples/vanilla-selectx/index.html)
 
 # Install
 ```bash
