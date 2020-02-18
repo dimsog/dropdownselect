@@ -55,9 +55,13 @@ export default class {
             return false;
         }
         for (let option of this.getOptions()) {
-            option.selected = false;
+            if (option.selected === true) {
+                option.selected = false;
+                option.$node.removeAttribute('class');
+            }
         }
         option.selected = true;
+        option.$node.classList.add('active');
         this._update();
     }
 
