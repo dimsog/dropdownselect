@@ -14,6 +14,8 @@ export default class {
             options.value = this.$el.value;
         }
 
+        this._render();
+
         // get options from select
         for (let $option of this.$el.options) {
             this.add({
@@ -23,7 +25,6 @@ export default class {
         }
 
         this.setValue(options.value);
-        this._render();
         this._bindCoreEvents();
         this._update();
     }
@@ -38,6 +39,12 @@ export default class {
     add(option) {
         option.type = 'option';
         this._state.data.push(option);
+
+        option.$node = document.createElement('li');
+        option.$node.innerHTML = option.name;
+        this.$dropdown.appendChild(option.$node);
+
+        this._bindOptionEvents(option);
         this._update();
         return this;
     }
@@ -48,9 +55,13 @@ export default class {
             return false;
         }
         for (let option of this.getOptions()) {
-            option.selected = false;
+            if (option.selected === true) {
+                option.selected = false;
+                option.$node.removeAttribute('class');
+            }
         }
         option.selected = true;
+        option.$node.classList.add('active');
         this._update();
     }
 
@@ -122,16 +133,6 @@ export default class {
             this._setButtonText(selectedOption.name);
         } else {
             this._setButtonText('');
-        }
-
-        this.$dropdown.innerHTML = '';
-        for (let option of this.getOptions()) {
-            if (option.$node === undefined) {
-                option.$node = document.createElement('li');
-                option.$node.innerHTML = option.name;
-                this._bindOptionEvents(option);
-            }
-            this.$dropdown.appendChild(option.$node);
         }
     }
 

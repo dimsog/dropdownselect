@@ -51,6 +51,7 @@
     height: 0;
     width: calc(100% + 2px);
     z-index: 2042;
+    background: #FFF;
     ul {
       margin: 0;
       padding: 0;
@@ -62,6 +63,9 @@
         font: 14px Helvetica, Arial,'Lucida Grande', sans-serif;
         &:hover {
           cursor: pointer;
+          background: #e8e9f2;
+        }
+        &.active {
           background: #e8e9f2;
         }
       }
