@@ -2,7 +2,7 @@
 
 A simple and lightweight javascript select without dependencies
 
-[Demo](https://vajs.ru/#dropdownselect)
+[Demo](https://vajs.ru/)
 
 # Install
 ```bash
