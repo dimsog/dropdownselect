@@ -101,15 +101,15 @@ export default class {
     }
 
     open() {
-        this.$container.classList.add('va-selectx--opened');
+        this.$container.classList.add('dropdownselect--opened');
     }
 
     close() {
-        this.$container.classList.remove('va-selectx--opened');
+        this.$container.classList.remove('dropdownselect--opened');
     }
 
     isOpened() {
-        return this.$container.classList.contains('va-selectx--opened');
+        return this.$container.classList.contains('dropdownselect--opened');
     }
 
     toggle() {
@@ -140,24 +140,24 @@ export default class {
     _render() {
         // init container
         this.$container = document.createElement('div');
-        this.$container.classList.add('va-selectx');
+        this.$container.classList.add('dropdownselect');
 
         // init button
         this.$button = document.createElement('button');
-        this.$button.classList.add('va-selectx__button');
+        this.$button.classList.add('dropdownselect__button');
 
         this.$arrow = document.createElement('div');
-        this.$arrow.classList.add('va-selectx__arrow');
+        this.$arrow.classList.add('dropdownselect__arrow');
 
         this.$buttonContainer = document.createElement('div');
-        this.$buttonContainer.classList.add('va-selectx__button-container');
+        this.$buttonContainer.classList.add('dropdownselect__button-container');
         this.$buttonContainer.appendChild(this.$button);
         this.$buttonContainer.appendChild(this.$arrow);
 
 
         // init dropdown
         this.$dropdownContainer = document.createElement('div');
-        this.$dropdownContainer.classList.add('va-selectx__dropdown');
+        this.$dropdownContainer.classList.add('dropdownselect__dropdown');
         this.$dropdown = document.createElement('ul');
         this.$dropdownContainer.appendChild(this.$dropdown);
 
