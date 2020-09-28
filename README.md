@@ -23,10 +23,10 @@ npm i @dimsog/dropdownselect
 
 ### SCSS and JavaScript
 ```scss
-@import '~dropdownselect/src/scss/dropdownselect';
+@import '~@dimsog/dropdownselect/src/scss/dropdownselect';
 ```
 ```js
-import DropdownSelect from 'dropdownselect';
+import DropdownSelect from '@dimsog/dropdownselect';
 new DropdownSelect("#select");
 ```
 
