@@ -1,6 +1,6 @@
 {
   "name": "dropdownselect",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "A simple and lightweight javascript select without dependencies",
   "main": "src/js/dropdownselect.js",
   "scripts": {
