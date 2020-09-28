@@ -60,14 +60,15 @@
       li {
         width: 100%;
         display: block;
-        padding: 10px;
+        padding: .5rem;
         font: 14px Helvetica, Arial,'Lucida Grande', sans-serif;
         &:hover {
           cursor: pointer;
-          background: #e8e9f2;
+          background: #f7f7fc;
         }
         &.active {
-          background: #e8e9f2;
+          background: #0577ea;
+          color: #FFF;
         }
       }
     }
