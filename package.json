@@ -1,14 +1,14 @@
 {
-  "name": "vanilla-selectx",
+  "name": "dropdownselect",
   "version": "1.0.2",
   "description": "A simple and lightweight javascript select without dependencies",
-  "main": "src/js/vanilla-selectx.js",
+  "main": "src/js/dropdownselect.js",
   "scripts": {
     "prod": "webpack --mode=production"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/dimsog/vanilla-selectx.git"
+    "url": "git+https://github.com/dimsog/dropdownselect.git"
   },
   "keywords": [
     "select",
@@ -17,19 +17,19 @@
   "author": "Dmitry R",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/dimsog/vanilla-selectx/issues"
+    "url": "https://github.com/dimsog/dropdownselect/issues"
   },
-  "homepage": "https://github.com/dimsog/vanilla-selectx#readme",
+  "homepage": "https://github.com/dimsog/dropdownselect#readme",
   "devDependencies": {
-    "@babel/core": "^7.8.4",
-    "@babel/preset-env": "^7.8.4",
-    "babel-loader": "^8.0.6",
-    "css-loader": "^3.4.2",
-    "mini-css-extract-plugin": "^0.8.2",
-    "node-sass": "^4.13.1",
+    "@babel/core": "^7.11.6",
+    "@babel/preset-env": "^7.11.5",
+    "babel-loader": "^8.1.0",
+    "css-loader": "^4.3.0",
+    "mini-css-extract-plugin": "^0.11.2",
+    "node-sass": "^4.14.1",
     "resolve-url-loader": "^3.1.1",
-    "sass-loader": "^8.0.2",
-    "webpack": "^4.41.6",
-    "webpack-cli": "^3.3.11"
+    "sass-loader": "^10.0.2",
+    "webpack": "^4.44.2",
+    "webpack-cli": "^3.3.12"
   }
 }

@@ -17,7 +17,8 @@ export default class {
         this._render();
 
         // get options from select
-        for (let $option of this.$el.options) {
+        for (let i = 0; i < this.$el.options.length; i++) {
+            const $option = this.$el.options[i];
             this.add({
                 value: $option.value,
                 name: $option.innerHTML
@@ -100,15 +101,15 @@ export default class {
     }
 
     open() {
-        this.$container.classList.add('va-selectx--opened');
+        this.$container.classList.add('dropdownselect--opened');
     }
 
     close() {
-        this.$container.classList.remove('va-selectx--opened');
+        this.$container.classList.remove('dropdownselect--opened');
     }
 
     isOpened() {
-        return this.$container.classList.contains('va-selectx--opened');
+        return this.$container.classList.contains('dropdownselect--opened');
     }
 
     toggle() {
@@ -139,26 +140,26 @@ export default class {
     _render() {
         // init container
         this.$container = document.createElement('div');
-        this.$container.classList.add('va-selectx');
+        this.$container.classList.add('dropdownselect');
 
         // init button
         this.$button = document.createElement('button');
-        this.$button.classList.add('va-selectx__button');
+        this.$button.classList.add('dropdownselect__button');
 
         this.$arrow = document.createElement('div');
-        this.$arrow.classList.add('va-selectx__arrow');
+        this.$arrow.classList.add('dropdownselect__arrow');
 
         this.$buttonContainer = document.createElement('div');
-        this.$buttonContainer.classList.add('va-selectx__button-container');
+        this.$buttonContainer.classList.add('dropdownselect__button-container');
         this.$buttonContainer.appendChild(this.$button);
         this.$buttonContainer.appendChild(this.$arrow);
 
 
         // init dropdown
         this.$dropdownContainer = document.createElement('div');
-        this.$dropdownContainer.classList.add('va-selectx__dropdown');
+        this.$dropdownContainer.classList.add('dropdownselect__dropdown');
         this.$dropdown = document.createElement('ul');
-        this.$dropdownContainer.append(this.$dropdown);
+        this.$dropdownContainer.appendChild(this.$dropdown);
 
         // init hidden select
         this.$input = document.createElement('input');
@@ -166,9 +167,9 @@ export default class {
         if (this.$el.getAttribute('name') !== null) {
             this.$input.setAttribute('name', this.$el.getAttribute('name'));
         }
-        this.$container.append(this.$input);
-        this.$container.append(this.$buttonContainer);
-        this.$container.append(this.$dropdownContainer);
+        this.$container.appendChild(this.$input);
+        this.$container.appendChild(this.$buttonContainer);
+        this.$container.appendChild(this.$dropdownContainer);
 
         this.$el.parentElement.replaceChild(this.$container, this.$el);
         this._state.isRendered = true;
