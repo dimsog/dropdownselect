@@ -1,12 +1,12 @@
-# vanilla-selectx
+# DropdownSelect
 
 A simple and lightweight javascript select without dependencies
 
-[Demo](https://vajs.ru/examples/vanilla-selectx/index.html)
+[Demo](https://vajs.ru/#dropdownselect)
 
 # Install
 ```bash
-npm i vanilla-selectx
+npm i dropdownselect
 ```
 
 # Usage
@@ -21,13 +21,24 @@ npm i vanilla-selectx
 </select>
 ```
 
-### SCSS
+### SCSS and JavaScript
 ```scss
-@import '~vanilla-selectx/src/scss/vanilla-selectx';
+@import '~dropdownselect/src/scss/dropdownselect';
+```
+```js
+import DropdownSelect from 'dropdownselect';
+new DropdownSelect("#select");
 ```
 
-### JavaScript
-```js
-import VanillaSelectx from 'vanilla-selectx';
-new VanillaSelectx("#select");
+### Or
+```html
+<link href="/dist/dropdownselect.css" rel="stylesheet">
+<script src="/dist/dropdownselect.js"></script>
+
+<script>
+    new DropdownSelect("#select");
+</script>
+
+
+
 ```
