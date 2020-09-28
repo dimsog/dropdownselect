@@ -6,7 +6,7 @@ A simple and lightweight javascript select without dependencies
 
 # Install
 ```bash
-npm i dropdownselect
+npm i @dimsog/dropdownselect
 ```
 
 # Usage
