@@ -17,7 +17,8 @@ export default class {
         this._render();
 
         // get options from select
-        for (let $option of this.$el.options) {
+        for (let i = 0; i < this.$el.options.length; i++) {
+            const $option = this.$el.options[i];
             this.add({
                 value: $option.value,
                 name: $option.innerHTML
@@ -158,7 +159,7 @@ export default class {
         this.$dropdownContainer = document.createElement('div');
         this.$dropdownContainer.classList.add('va-selectx__dropdown');
         this.$dropdown = document.createElement('ul');
-        this.$dropdownContainer.append(this.$dropdown);
+        this.$dropdownContainer.appendChild(this.$dropdown);
 
         // init hidden select
         this.$input = document.createElement('input');
@@ -166,9 +167,9 @@ export default class {
         if (this.$el.getAttribute('name') !== null) {
             this.$input.setAttribute('name', this.$el.getAttribute('name'));
         }
-        this.$container.append(this.$input);
-        this.$container.append(this.$buttonContainer);
-        this.$container.append(this.$dropdownContainer);
+        this.$container.appendChild(this.$input);
+        this.$container.appendChild(this.$buttonContainer);
+        this.$container.appendChild(this.$dropdownContainer);
 
         this.$el.parentElement.replaceChild(this.$container, this.$el);
         this._state.isRendered = true;
