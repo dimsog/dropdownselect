@@ -1,6 +1,6 @@
 {
   "name": "@dimsog/dropdownselect",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "A simple and lightweight javascript select without dependencies",
   "main": "src/js/dropdownselect.js",
   "scripts": {
