@@ -201,6 +201,11 @@ export default class {
                 this.close();
             }
         });
+        this.$container.addEventListener('keydown', (e) => {
+            if (e.code === 'Escape') {
+                this.close();
+            }
+        })
     }
 
     _bindOptionEvents(option) {
