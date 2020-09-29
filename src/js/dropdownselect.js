@@ -34,6 +34,15 @@ export default class {
         this._update();
     }
 
+    static fromElements(elements) {
+        if (elements instanceof NodeList === false) {
+            elements = document.querySelectorAll(elements);
+        }
+        return [...elements].map((element) => {
+            return new this(element);
+        });
+    }
+
     /**
      * select.add({
      *     value: 1,
