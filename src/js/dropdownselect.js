@@ -2,7 +2,11 @@
 
 export default class {
     constructor(selector, options = {}) {
-        this.$el = document.querySelector(selector);
+        if (selector instanceof HTMLElement) {
+            this.$el = selector;
+        } else {
+            this.$el = document.querySelector(selector);
+        }
         if (this.$el === null) {
             throw new Error(`${selector} not found!`);
         }
@@ -28,6 +32,15 @@ export default class {
         this.setValue(options.value);
         this._bindCoreEvents();
         this._update();
+    }
+
+    static fromElements(elements) {
+        if (elements instanceof NodeList === false) {
+            elements = document.querySelectorAll(elements);
+        }
+        return [...elements].map((element) => {
+            return new this(element);
+        });
     }
 
     /**
@@ -188,6 +201,11 @@ export default class {
                 this.close();
             }
         });
+        this.$container.addEventListener('keydown', (e) => {
+            if (e.code === 'Escape') {
+                this.close();
+            }
+        })
     }
 
     _bindOptionEvents(option) {

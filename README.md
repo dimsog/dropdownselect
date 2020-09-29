@@ -38,7 +38,18 @@ new DropdownSelect("#select");
 <script>
     new DropdownSelect("#select");
 </script>
+```
 
+### Multiple instances
+```html
+<select class="select"></select>
+<select class="select"></select>
+<select class="select"></select>
+<select class="select"></select>
+```
 
-
+```js
+DropdownSelect.fromElements('.select');
+// or
+DropdownSelect.fromElements(document.querySelectorAll('.select'));
 ```
