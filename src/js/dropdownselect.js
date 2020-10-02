@@ -38,9 +38,9 @@ export default class {
         if (elements instanceof NodeList === false) {
             elements = document.querySelectorAll(elements);
         }
-        return [...elements].map((element) => {
-            return new this(element);
-        });
+        for (let i = 0; i < elements.length; i++) {
+            new this(elements[i])
+        }
     }
 
     /**
