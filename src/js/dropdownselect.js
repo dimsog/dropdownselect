@@ -20,6 +20,15 @@ export default class {
 
         this._render();
 
+        for (let i = 0; i < this.$el.children; i++) {
+            const $node = this.$el.children[i];
+            if ($node instanceof HTMLOptGroupElement) {
+                this.addOptgroup($node.innerHTML, this._convertNodeListToOptionDataItems($node.children));
+            } else {
+                this.add(this._convertNodeToOptionDataItem($node));
+            }
+        }
+
         // get options from select
         for (let i = 0; i < this.$el.options.length; i++) {
             const $option = this.$el.options[i];
@@ -51,6 +60,10 @@ export default class {
      * @param option
      */
     add(option) {
+        option = Object.assign(option);
+        if (typeof option.optgroup === "undefined") {
+            this._state.data.push(option);
+        }
         option.type = 'option';
         this._state.data.push(option);
 
@@ -61,6 +74,18 @@ export default class {
         this._bindOptionEvents(option);
         this._update();
         return this;
+    }
+
+    addToOptgroup(label, option) {
+
+    }
+
+    addOptgroup(label, options = []) {
+        this._state.data.push({
+            type: 'optgroup',
+            label: label,
+            children: options
+        })
     }
 
     setValue(value) {
@@ -137,6 +162,17 @@ export default class {
         return this._state.isRendered;
     }
 
+    _$addOptions(nodeList) {
+        for (let i = 0; i < nodeList.length; i++) {
+            const $node = nodeList[i];
+            if ($node instanceof HTMLOptGroupElement) {
+
+            } else {
+
+            }
+        }
+    }
+
     _update() {
         if (this._isReady() === false) {
             return;
@@ -206,6 +242,21 @@ export default class {
                 this.close();
             }
         })
+    }
+
+    _convertNodeToOptionDataItem($node) {
+        return {
+            value: $node.value,
+            name: $node.innerHTML
+        };
+    }
+
+    _convertNodeListToOptionDataItems($nodeList) {
+        const result = [];
+        for (let i = 0; i < $nodeList.length; i++) {
+            result.push(this._convertNodeToOptionDataItem($nodeList[i]));
+        }
+        return result;
     }
 
     _bindOptionEvents(option) {
