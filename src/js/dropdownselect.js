@@ -11,6 +11,24 @@ export default class {
             throw new Error(`${selector} not found!`);
         }
         this._state = {
+            /**
+             * Structure:
+             * [
+             *      {
+             *          id: Number,
+             *          name: String
+             *      },
+             *      {
+             *          id: Number,
+             *          name: String,
+             *          items: [{
+             *              id: Number,
+             *              name: String
+             *          }]
+             *      }
+             *
+             * ]
+             */
             data: [],
             isRendered: false
         };
@@ -20,14 +38,8 @@ export default class {
 
         this._render();
 
-        for (let i = 0; i < this.$el.children; i++) {
-            const $node = this.$el.children[i];
-            if ($node instanceof HTMLOptGroupElement) {
-                this.addOptgroup($node.innerHTML, this._convertNodeListToOptionDataItems($node.children));
-            } else {
-                this.add(this._convertNodeToOptionDataItem($node));
-            }
-        }
+        this._$addOptions(this.$el.children);
+
 
         // get options from select
         for (let i = 0; i < this.$el.options.length; i++) {
@@ -76,15 +88,11 @@ export default class {
         return this;
     }
 
-    addToOptgroup(label, option) {
-
-    }
-
     addOptgroup(label, options = []) {
         this._state.data.push({
-            type: 'optgroup',
-            label: label,
-            children: options
+            id: 0,
+            name: label,
+            options
         })
     }
 
@@ -163,12 +171,12 @@ export default class {
     }
 
     _$addOptions(nodeList) {
-        for (let i = 0; i < nodeList.length; i++) {
+        for (let i = 0; i < nodeList; i++) {
             const $node = nodeList[i];
             if ($node instanceof HTMLOptGroupElement) {
-
+                this.addOptgroup($node.innerText, this._$convertNodeListToOptionDataItems($node.children));
             } else {
-
+                this.add(this._$convertNodeToOptionDataItem($node));
             }
         }
     }
@@ -244,17 +252,17 @@ export default class {
         })
     }
 
-    _convertNodeToOptionDataItem($node) {
+    _$convertNodeToOptionDataItem($node) {
         return {
-            value: $node.value,
+            id: $node.value,
             name: $node.innerHTML
         };
     }
 
-    _convertNodeListToOptionDataItems($nodeList) {
+    _$convertNodeListToOptionDataItems($nodeList) {
         const result = [];
         for (let i = 0; i < $nodeList.length; i++) {
-            result.push(this._convertNodeToOptionDataItem($nodeList[i]));
+            result.push(this._$convertNodeToOptionDataItem($nodeList[i]));
         }
         return result;
     }
