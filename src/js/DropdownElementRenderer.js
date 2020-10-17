@@ -2,9 +2,8 @@ export default class DropdownElementRenderer {
     render(option) {
         if (option.items === undefined || option.items.length === 0) {
             return this._$renderOption(option);
-        } else {
-            return this._$renderOptionGroup(option);
         }
+        return this._$renderOptionGroup(option);
     }
 
     _$renderOptionGroup(option) {
