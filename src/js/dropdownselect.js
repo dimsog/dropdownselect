@@ -170,14 +170,9 @@ export default class {
         return this._state.isRendered;
     }
 
-    _$addOptions(nodeList) {
-        for (let i = 0; i < nodeList; i++) {
-            const $node = nodeList[i];
-            if ($node instanceof HTMLOptGroupElement) {
-                this.addOptgroup($node.innerText, this._$convertNodeListToOptionDataItems($node.children));
-            } else {
-                this.add(this._$convertNodeToOptionDataItem($node));
-            }
+    _$addOptions($nodeList) {
+        for (const option of this._$convertNodeListToOptionDataItems($nodeList)) {
+            this.add(option);
         }
     }
 
@@ -252,17 +247,31 @@ export default class {
         })
     }
 
-    _$convertNodeToOptionDataItem($node) {
-        return {
-            id: $node.value,
-            name: $node.innerHTML
-        };
-    }
-
     _$convertNodeListToOptionDataItems($nodeList) {
         const result = [];
         for (let i = 0; i < $nodeList.length; i++) {
-            result.push(this._$convertNodeToOptionDataItem($nodeList[i]));
+            if ($nodeList[i] instanceof HTMLOptGroupElement) {
+                const items = [];
+                for (let j = 0; j < $nodeList[i].children.length; i++) {
+                    if ($nodeList[i].children[j] instanceof HTMLOptionElement === false) {
+                        continue;
+                    }
+                    items.push({
+                        id: $nodeList[i].children[j].value,
+                        name: $nodeList[i].children[j].innerText,
+                    });
+                }
+                result.push({
+                    id: 0,
+                    name: $nodeList[i].innerText,
+                    items
+                });
+            } else {
+                result.push({
+                    id: $nodeList[i].value,
+                    name: $nodeList[i].innerText
+                });
+            }
         }
         return result;
     }
