@@ -265,7 +265,7 @@ export default class {
 
     _renderOptionGroup(optionGroup) {
         const $node = document.createElement('li');
-        $node.classList.add('dropdownselect--optiongroup');
+        $node.classList.add('dropdownselect-optiongroup');
         const $groupName = document.createElement('span');
         $groupName.innerHTML = optionGroup.name;
         const $container = document.createElement('ul');
@@ -279,6 +279,7 @@ export default class {
 
     _renderOption(option) {
         const $node = document.createElement('li');
+        $node.classList.add('dropdownselect-option')
         const $optionNode = document.createElement('span');
         $optionNode.innerHTML = option.name;
         $node.appendChild($optionNode);
