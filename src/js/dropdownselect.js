@@ -159,7 +159,7 @@ export default class {
         option.$node.classList.add('active');
 
         if (this._haveEvent('change')) {
-            this._state.on.change.call(this, option.id, option);
+            this._state.on.change.call(this, option.id, option, this);
         }
 
         this._update();
