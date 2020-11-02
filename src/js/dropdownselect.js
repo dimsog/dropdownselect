@@ -85,7 +85,7 @@ export default class {
         if (option === null) {
             return null;
         }
-        return option.value;
+        return option.id;
     }
 
     getOptionByValue(value) {
@@ -169,7 +169,7 @@ export default class {
         }
         let selectedOption = this.getSelectedOption();
         if (selectedOption !== null) {
-            this.$input.value = selectedOption.value;
+            this.$input.value = selectedOption.id;
             this._setButtonText(selectedOption.name);
         } else {
             this._setButtonText('');
