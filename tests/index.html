@@ -8,11 +8,23 @@
     <script src="../dist/dropdownselect.js"></script>
 
     <link href="../node_modules/mocha/mocha.css" type="text/css" rel="stylesheet">
+
+    <style>
+        #container {
+            margin-top: 100px;
+            width: 300px;
+            margin-left: 20px;
+        }
+    </style>
 </head>
 <body>
-<select id="select"></select>
-<div id="mocha"></div>
 
+<div id="mocha"></div>
+<div id="container">
+    <select id="select"></select>
+    <select id="select2"></select>
+    <select id="select3"></select>
+</div>
 <script src="../node_modules/mocha/mocha.js"></script>
 <script src="../node_modules/chai/chai.js"></script>
 <script>
