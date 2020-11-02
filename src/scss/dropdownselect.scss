@@ -59,10 +59,10 @@
       margin: 0;
       padding: 0;
       list-style: none;
-      li {
+      .dropdownselect-option {
         width: 100%;
         display: block;
-        padding: .5rem;
+        padding: 5px 10px;
         font: 14px Helvetica, Arial,'Lucida Grande', sans-serif;
         box-sizing: border-box;
         &:hover {
@@ -72,6 +72,20 @@
         &.active {
           background: #0577ea;
           color: #FFF;
+        }
+      }
+
+      .dropdownselect-optiongroup {
+        & > span {
+          width: 100%;
+          display: block;
+          font: 14px Helvetica, Arial,'Lucida Grande', sans-serif;
+          box-sizing: border-box;
+          font-weight: bold;
+          padding: 5px 10px;
+        }
+        .dropdownselect-option {
+          padding-left: 20px;
         }
       }
     }

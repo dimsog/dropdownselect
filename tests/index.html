@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Tests</title>
+
+    <link href="../dist/dropdownselect.css" type="text/css" rel="stylesheet">
+    <script src="../dist/dropdownselect.js"></script>
+
+    <link href="../node_modules/mocha/mocha.css" type="text/css" rel="stylesheet">
+
+    <style>
+        #container {
+            margin-top: 100px;
+            width: 300px;
+            margin-left: 20px;
+        }
+    </style>
+</head>
+<body>
+
+<div id="mocha"></div>
+<div id="container">
+    <select id="select"></select>
+    <select id="select2"></select>
+    <select id="select3"></select>
+</div>
+<script src="../node_modules/mocha/mocha.js"></script>
+<script src="../node_modules/chai/chai.js"></script>
+<script>
+    mocha.setup('bdd');
+</script>
+<script src="types/api.js"></script>
+
+<script type="text/javascript">
+    mocha.run();
+</script>
+</body>
+</html>

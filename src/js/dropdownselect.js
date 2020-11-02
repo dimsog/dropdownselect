@@ -11,7 +11,26 @@ export default class {
             throw new Error(`${selector} not found!`);
         }
         this._state = {
+            /**
+             * Structure:
+             * [
+             *      {
+             *          id: Number,
+             *          name: String
+             *      },
+             *      {
+             *          id: Number,
+             *          name: String,
+             *          items: [{
+             *              id: Number,
+             *              name: String
+             *          }]
+             *      }
+             *
+             * ]
+             */
             data: [],
+            on: options.on || {},
             isRendered: false
         };
         if (options.value === undefined) {
@@ -19,16 +38,6 @@ export default class {
         }
 
         this._render();
-
-        // get options from select
-        for (let i = 0; i < this.$el.options.length; i++) {
-            const $option = this.$el.options[i];
-            this.add({
-                value: $option.value,
-                name: $option.innerHTML
-            });
-        }
-
         this.setValue(options.value);
         this._bindCoreEvents();
         this._update();
@@ -38,45 +47,38 @@ export default class {
         if (elements instanceof NodeList === false) {
             elements = document.querySelectorAll(elements);
         }
-        return [...elements].map((element) => {
-            return new this(element);
-        });
+        for (let i = 0; i < elements.length; i++) {
+            new this(elements[i])
+        }
     }
 
     /**
      * select.add({
-     *     value: 1,
+     *     id: 1,
      *     name: 'Text'
      * });
      * @param option
      */
     add(option) {
-        option.type = 'option';
-        this._state.data.push(option);
+        const _option = Object.assign(option);
+        this._state.data.push(_option);
+        this._renderItem(_option);
 
-        option.$node = document.createElement('li');
-        option.$node.innerHTML = option.name;
-        this.$dropdown.appendChild(option.$node);
-
-        this._bindOptionEvents(option);
         this._update();
         return this;
     }
 
+    addOptgroup(name, options = []) {
+        this.add({
+            id: 0,
+            name: name,
+            items: options
+        });
+    }
+
     setValue(value) {
         let option = this.getOptionByValue(value);
-        if (option === null) {
-            return false;
-        }
-        for (let option of this.getOptions()) {
-            if (option.selected === true) {
-                option.selected = false;
-                option.$node.removeAttribute('class');
-            }
-        }
-        option.selected = true;
-        option.$node.classList.add('active');
-        this._update();
+        return this._setValueByOption(option);
     }
 
     getValue() {
@@ -84,12 +86,12 @@ export default class {
         if (option === null) {
             return null;
         }
-        return option.value;
+        return option.id;
     }
 
     getOptionByValue(value) {
         for (let option of this.getOptions()) {
-            if (option.value === value) {
+            if (option.id === value) {
                 return option;
             }
         }
@@ -97,7 +99,17 @@ export default class {
     }
 
     getOptions() {
-        return this._state.data;
+        const options = [];
+        for (const option of this._state.data) {
+            if (option.items === undefined) {
+                options.push(option);
+            } else {
+                for (const subOption of option.items) {
+                    options.push(subOption)
+                }
+            }
+        }
+        return options;
     }
 
     getSelectedOption() {
@@ -133,6 +145,26 @@ export default class {
         }
     }
 
+    _setValueByOption(option) {
+        if (option === null) {
+            return false;
+        }
+        for (let _option of this.getOptions()) {
+            if (_option.selected === true) {
+                _option.selected = false;
+                _option.$node.classList.remove('active');
+            }
+        }
+        option.selected = true;
+        option.$node.classList.add('active');
+
+        if (this._haveEvent('change')) {
+            this._state.on.change.call(this, option.id, option, this);
+        }
+
+        this._update();
+    }
+
     _isReady() {
         return this._state.isRendered;
     }
@@ -143,7 +175,7 @@ export default class {
         }
         let selectedOption = this.getSelectedOption();
         if (selectedOption !== null) {
-            this.$input.value = selectedOption.value;
+            this.$input.value = selectedOption.id;
             this._setButtonText(selectedOption.name);
         } else {
             this._setButtonText('');
@@ -185,6 +217,16 @@ export default class {
         this.$container.appendChild(this.$dropdownContainer);
 
         this.$el.parentElement.replaceChild(this.$container, this.$el);
+
+        for (let i = 0; i < this.$el.children.length; i++) {
+            const $node = this.$el.children[i];
+            if ($node instanceof HTMLOptGroupElement) {
+                this.addOptgroup($node.label, this._$convertNodeListToOptionDataItems($node.children));
+            } else {
+                this.add(this._$convertNodeToOptionDataItem($node));
+            }
+        }
+
         this._state.isRendered = true;
     }
 
@@ -208,14 +250,66 @@ export default class {
         })
     }
 
-    _bindOptionEvents(option) {
-        option.$node.addEventListener('click', (e) => {
-            this.close();
-            this.setValue(option.value);
-        })
+    _$convertNodeToOptionDataItem($node) {
+        return {
+            id: $node.value,
+            name: $node.innerHTML
+        };
+    }
+
+    _$convertNodeListToOptionDataItems($nodeList) {
+        const result = [];
+        for (let i = 0; i < $nodeList.length; i++) {
+            result.push(this._$convertNodeToOptionDataItem($nodeList[i]));
+        }
+        return result;
     }
 
     _setButtonText(text) {
         this.$button.innerHTML = text;
+    }
+
+    _renderItem(option) {
+        if (option.items === undefined) {
+            this.$dropdown.append(this._renderOption(option));
+        } else {
+            this.$dropdown.append(this._renderOptionGroup(option));
+        }
+    }
+
+    _renderOptionGroup(optionGroup) {
+        const $node = document.createElement('li');
+        $node.classList.add('dropdownselect-optiongroup');
+        const $groupName = document.createElement('span');
+        $groupName.innerHTML = optionGroup.name;
+        const $container = document.createElement('ul');
+        for (const item of optionGroup.items) {
+            $container.append(this._renderOption(item));
+        }
+        $node.appendChild($groupName);
+        $node.appendChild($container);
+        return $node;
+    }
+
+    _renderOption(option) {
+        const $node = document.createElement('li');
+        $node.classList.add('dropdownselect-option')
+        const $optionNode = document.createElement('span');
+        $optionNode.innerHTML = option.name;
+        $node.appendChild($optionNode);
+        option.$node = $node;
+        this._bindOptionEvents(option);
+        return $node;
+    }
+
+    _haveEvent(event) {
+        return typeof this._state.on[event] === 'function';
+    }
+
+    _bindOptionEvents(option) {
+        option.$node.addEventListener('click', () => {
+            this.close();
+            this._setValueByOption(option);
+        });
     }
 }

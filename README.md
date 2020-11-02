@@ -53,3 +53,15 @@ DropdownSelect.fromElements('.select');
 // or
 DropdownSelect.fromElements(document.querySelectorAll('.select'));
 ```
+
+### Full demo
+```js
+const select = new DropdownSelect('#selector', {
+    on: {
+        change(value, option, instance) {
+            // use "instance" or "this" for access to current instance
+            alert('Selected value: ' + value)
+        }
+    }
+});
+```
