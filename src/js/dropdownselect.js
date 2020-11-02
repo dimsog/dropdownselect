@@ -61,15 +61,8 @@ export default class {
     add(option) {
         const _option = Object.assign(option);
         this._state.data.push(_option);
+        this._renderItem(_option);
 
-        if (_option.items === undefined) {
-            _option.$node = this._renderOption(_option);
-        } else {
-            _option.$node = this._renderOptionGroup(_option);
-        }
-        this.$dropdown.appendChild(_option.$node);
-
-        this._bindOptionEvents(_option);
         this._update();
         return this;
     }
@@ -84,18 +77,7 @@ export default class {
 
     setValue(value) {
         let option = this.getOptionByValue(value);
-        if (option === null) {
-            return false;
-        }
-        for (let option of this.getOptions()) {
-            if (option.selected === true) {
-                option.selected = false;
-                option.$node.removeAttribute('class');
-            }
-        }
-        option.selected = true;
-        option.$node.classList.add('active');
-        this._update();
+        return this._setValueByOption(option);
     }
 
     getValue() {
@@ -108,7 +90,7 @@ export default class {
 
     getOptionByValue(value) {
         for (let option of this.getOptions()) {
-            if (option.value === value) {
+            if (option.id === value) {
                 return option;
             }
         }
@@ -116,7 +98,17 @@ export default class {
     }
 
     getOptions() {
-        return this._state.data;
+        const options = [];
+        for (const option of this._state.data) {
+            if (option.items === undefined) {
+                options.push(option);
+            } else {
+                for (const subOption of option.items) {
+                    options.push(subOption)
+                }
+            }
+        }
+        return options;
     }
 
     getSelectedOption() {
@@ -150,6 +142,21 @@ export default class {
         } else {
             this.open();
         }
+    }
+
+    _setValueByOption(option) {
+        if (option === null) {
+            return false;
+        }
+        for (let _option of this.getOptions()) {
+            if (_option.selected === true) {
+                _option.selected = false;
+                _option.$node.classList.remove('active');
+            }
+        }
+        option.selected = true;
+        option.$node.classList.add('active');
+        this._update();
     }
 
     _isReady() {
@@ -252,15 +259,16 @@ export default class {
         return result;
     }
 
-    _bindOptionEvents(option) {
-        option.$node.addEventListener('click', (e) => {
-            this.close();
-            this.setValue(option.value);
-        })
-    }
-
     _setButtonText(text) {
         this.$button.innerHTML = text;
+    }
+
+    _renderItem(option) {
+        if (option.items === undefined) {
+            this.$dropdown.append(this._renderOption(option));
+        } else {
+            this.$dropdown.append(this._renderOptionGroup(option));
+        }
     }
 
     _renderOptionGroup(optionGroup) {
@@ -283,6 +291,15 @@ export default class {
         const $optionNode = document.createElement('span');
         $optionNode.innerHTML = option.name;
         $node.appendChild($optionNode);
+        option.$node = $node;
+        this._bindOptionEvents(option);
         return $node;
+    }
+
+    _bindOptionEvents(option) {
+        option.$node.addEventListener('click', () => {
+            this.close();
+            this._setValueByOption(option);
+        });
     }
 }
