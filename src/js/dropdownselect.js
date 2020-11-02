@@ -30,6 +30,7 @@ export default class {
              * ]
              */
             data: [],
+            on: options.on || {},
             isRendered: false
         };
         if (options.value === undefined) {
@@ -156,6 +157,11 @@ export default class {
         }
         option.selected = true;
         option.$node.classList.add('active');
+
+        if (this._haveEvent('change')) {
+            this._state.on.change.call(this, option.id, option);
+        }
+
         this._update();
     }
 
@@ -294,6 +300,10 @@ export default class {
         option.$node = $node;
         this._bindOptionEvents(option);
         return $node;
+    }
+
+    _haveEvent(event) {
+        return typeof this._state.on[event] === 'function';
     }
 
     _bindOptionEvents(option) {
