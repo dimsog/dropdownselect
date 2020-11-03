@@ -51,4 +51,11 @@ describe('UI', () => {
         assert.isFalse(select.$container.classList.contains('dropdownselect--opened'));
         assert.isFalse(select.isOpened());
     });
+    const _select = new DropdownSelect('#select4');
+    it('Default value', () => {
+        assert.equal(2, _select.getValue());
+    })
+    it('Custom name', () => {
+        assert.isNotNull(_select.$container.querySelector('input[name=test-custom-name]'));
+    })
 });
