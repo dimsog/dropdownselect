@@ -1,7 +1,7 @@
 "use strict";
 
 export default class {
-    constructor(selector, options = {}) {
+    constructor(selector, config = {}) {
         if (selector instanceof HTMLElement) {
             this.$el = selector;
         } else {
@@ -30,13 +30,13 @@ export default class {
              * ]
              */
             data: [],
-            on: options.on || {},
+            on: config.on || {},
             selectedOption: null,
             isRendered: false
         };
 
         this._render();
-        this.setValue(options.value || this.$el.value);
+        this.setValue(config.value || this.$el.value);
         this._bindCoreEvents();
         this._update();
     }
