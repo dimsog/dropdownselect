@@ -76,6 +76,9 @@ export default class {
 
     setValue(value) {
         let option = this.getOptionByValue(value);
+        if (option === null) {
+            return false;
+        }
         return this._setValueByOption(option);
     }
 
