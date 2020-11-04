@@ -7,6 +7,20 @@ describe('Constructor', () => {
     it('Selector', () => {
         new DropdownSelect('#select2');
     });
+    it('Options', () => {
+        const select = new DropdownSelect('#it-options', {
+            options: [{
+                id: 1,
+                name: 'Option 1'
+            },{
+                id: 2,
+                name: 'Option 2'
+            },{
+                id: 3,
+                name: 'Option 3'
+            }]
+        });
+    });
 });
 
 describe('Api', () => {

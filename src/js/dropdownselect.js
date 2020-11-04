@@ -36,6 +36,11 @@ export default class {
         };
 
         this._render();
+        if (config.options !== undefined) {
+            for (const option of config.options) {
+                this.add(option);
+            }
+        }
         this.setValue(config.value || this.$el.value, true);
         this._bindCoreEvents();
         this._update();
