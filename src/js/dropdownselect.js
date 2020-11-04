@@ -75,7 +75,7 @@ export default class {
     }
 
     setValue(value) {
-        let option = this.getOptionByValue(value);
+        const option = this.getOptionByValue(value);
         if (option === null) {
             return false;
         }
