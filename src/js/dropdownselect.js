@@ -30,6 +30,7 @@ export default class {
              * ]
              */
             options: [],
+            totalOptions: 0,
             on: config.on || {},
             selectedOption: null,
             isRendered: false
@@ -66,8 +67,9 @@ export default class {
         const _option = Object.assign(option);
         this._state.options.push(_option);
         this._renderItem(_option);
-
         this._update();
+
+        this._state.totalOptions++;
         return this;
     }
 
@@ -140,6 +142,10 @@ export default class {
         } else {
             this.open();
         }
+    }
+
+    length() {
+        return this._state.totalOptions;
     }
 
     _setValueByOption(option, silent = false) {

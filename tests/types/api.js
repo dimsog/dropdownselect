@@ -20,6 +20,7 @@ describe('Constructor', () => {
                 name: 'Option 3'
             }]
         });
+        assert.equal(3, select.length());
     });
 });
 
