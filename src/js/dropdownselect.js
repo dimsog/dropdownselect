@@ -31,14 +31,12 @@ export default class {
              */
             data: [],
             on: options.on || {},
+            selectedOption: null,
             isRendered: false
         };
-        if (options.value === undefined) {
-            options.value = this.$el.value;
-        }
 
         this._render();
-        this.setValue(options.value);
+        this.setValue(options.value || this.$el.value);
         this._bindCoreEvents();
         this._update();
     }
@@ -113,16 +111,7 @@ export default class {
     }
 
     getSelectedOption() {
-        let options = this.getOptions();
-        if (options.length === 0) {
-            return null;
-        }
-        for (let option of this.getOptions()) {
-            if (option.selected) {
-                return option;
-            }
-        }
-        return options[0];
+        return this._state.selectedOption;
     }
 
     open() {
@@ -146,22 +135,15 @@ export default class {
     }
 
     _setValueByOption(option) {
-        if (option === null) {
-            return false;
-        }
         for (let _option of this.getOptions()) {
-            if (_option.selected === true) {
-                _option.selected = false;
-                _option.$node.classList.remove('active');
-            }
+            _option.$node.classList.remove('active');
         }
-        option.selected = true;
+        this._state.selectedOption = option;
         option.$node.classList.add('active');
 
         if (this._haveEvent('change')) {
             this._state.on.change.call(this, option.id, option, this);
         }
-
         this._update();
     }
 
