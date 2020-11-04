@@ -26,10 +26,12 @@ describe('Constructor', () => {
 
 describe('Api', () => {
     it('Add an option', () => {
+        assert.equal(0, select.length());
         select.add({
             id: 1,
             name: 'Test'
         });
+        assert.equal(1, select.length());
     });
     it('Add an empty option group', () => {
         select.addOptgroup('Test group', [{
