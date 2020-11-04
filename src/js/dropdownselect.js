@@ -36,7 +36,7 @@ export default class {
         };
 
         this._render();
-        this.setValue(config.value || this.$el.value);
+        this.setValue(config.value || this.$el.value, true);
         this._bindCoreEvents();
         this._update();
     }
@@ -74,12 +74,12 @@ export default class {
         });
     }
 
-    setValue(value) {
+    setValue(value, silent = false) {
         const option = this.getOptionByValue(value);
         if (option === null) {
             return false;
         }
-        return this._setValueByOption(option);
+        return this._setValueByOption(option, silent);
     }
 
     getValue() {
@@ -137,14 +137,14 @@ export default class {
         }
     }
 
-    _setValueByOption(option) {
+    _setValueByOption(option, silent = false) {
         for (let _option of this.getOptions()) {
             _option.$node.classList.remove('active');
         }
         this._state.selectedOption = option;
         option.$node.classList.add('active');
 
-        if (this._haveEvent('change')) {
+        if (silent === false && this._haveEvent('change')) {
             this._state.on.change.call(this, option.id, option, this);
         }
         this._update();
