@@ -29,7 +29,7 @@ export default class {
              *
              * ]
              */
-            data: [],
+            options: [],
             on: config.on || {},
             selectedOption: null,
             isRendered: false
@@ -59,7 +59,7 @@ export default class {
      */
     add(option) {
         const _option = Object.assign(option);
-        this._state.data.push(_option);
+        this._state.options.push(_option);
         this._renderItem(_option);
 
         this._update();
@@ -101,7 +101,7 @@ export default class {
 
     getOptions() {
         const options = [];
-        for (const option of this._state.data) {
+        for (const option of this._state.options) {
             if (option.items === undefined) {
                 options.push(option);
             } else {
