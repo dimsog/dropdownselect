@@ -57,6 +57,16 @@ DropdownSelect.fromElements(document.querySelectorAll('.select'));
 ### Full demo
 ```js
 const select = new DropdownSelect('#selector', {
+    options: [{
+        id: 1,
+        name: 'Option 1'
+    }, {
+        id: 2,
+        name: 'Option 2'
+    },{
+        id: 3,
+        name: 'Option 3'
+    }],
     on: {
         change(value, option, instance) {
             // use "instance" or "this" for access to current instance
@@ -64,4 +74,16 @@ const select = new DropdownSelect('#selector', {
         }
     }
 });
+```
+
+### Api
+```js
+// Add a new option:
+select.add({
+    id: 4,
+    name: 'Option 4'
+});
+
+// Count the number of options 
+select.length()
 ```
