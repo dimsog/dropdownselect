@@ -84,6 +84,11 @@ select.add({
     name: 'Option 4'
 });
 
+// Setters/Getters
+select.setValue(2);
+select.getValue(); // 2
+select.getSelectedOption(); // {id: 2, name: "Option 2"}
+
 // Count the number of options 
 select.length()
 ```
