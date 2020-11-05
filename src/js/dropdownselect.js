@@ -65,6 +65,7 @@ export default class {
      */
     add(option) {
         const _option = Object.assign(option);
+        this._normalizeOption(_option);
         this._state.options.push(_option);
         this._renderItem(_option);
         this._update();
@@ -307,5 +308,13 @@ export default class {
             this.close();
             this._setValueByOption(option);
         });
+    }
+
+    _normalizeValue(value) {
+        return value + '';
+    }
+
+    _normalizeOption(option) {
+        option.id = this._normalizeValue(option.id);
     }
 }
